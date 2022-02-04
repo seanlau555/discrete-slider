@@ -1,8 +1,3 @@
-import {
-  Streamlit,
-  StreamlitComponentBase,
-  withStreamlitConnection,
-} from "streamlit-component-lib"
 import React, { ReactNode } from "react"
 import Slider from "@mui/material/Slider"
 import { styled } from "@mui/system"
@@ -13,13 +8,21 @@ function createMarks(labels: string[]): any[] {
   })
 }
 
-class DiscreteSlider extends StreamlitComponentBase {
+class DiscreteSlider extends React.Component {
   public state = { value: 0 }
 
-  public render = (): ReactNode => {
-    const options = this.props.args["options"]
+  constructor(props) {
+    super(props)
+  }
 
+  public onChange = () => {
+    this.props.onChange()
+  }
+
+  public render = (): ReactNode => {
+    const options = this.props.options
     const width = this.props.width
+
     const vMargin = 7
     const hMargin = 20
     const StyledSlider = styled(Slider)({
@@ -41,7 +44,6 @@ class DiscreteSlider extends StreamlitComponentBase {
         onChange={(_, value) => {
           const selectedOption = options[Number(value)]
           this.setState({ value })
-          Streamlit.setComponentValue(selectedOption)
         }}
         disabled={this.props.disabled}
       />
@@ -49,4 +51,4 @@ class DiscreteSlider extends StreamlitComponentBase {
   }
 }
 
-export default withStreamlitConnection(DiscreteSlider)
+export default DiscreteSlider
